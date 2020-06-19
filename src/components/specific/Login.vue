@@ -54,7 +54,7 @@ export default {};
     margin-top: 20px;
     color: rgb(255, 255, 255);
     background-color: rgb(255, 0, 0);
-    border-radius: 10px;
+    border-radius: 25px;
     font-size: 16px;
     justify-content: center;
     align-items: center;

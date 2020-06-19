@@ -92,7 +92,8 @@ export default {
   > .title {
     display: flex;
     width: 100%;
-    margin: 10px;
+    margin: 15px;
+    margin-top: 25px;
     margin-right: unset;
     font-size: 40px;
     font-weight: 900;

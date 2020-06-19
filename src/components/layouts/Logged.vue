@@ -1,7 +1,10 @@
 <template>
   <base-layout>
+    <template #header>
+      <slot name="header"></slot>
+    </template>
     <template #main>
-      <slot name="main"></slot>
+      <slot></slot>
     </template>
     <template #footer>
       <div id="bottomNav">

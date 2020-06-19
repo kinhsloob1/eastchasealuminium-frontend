@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <header ref="header">
-      <TopNav :top-nav="getTopNavData"></TopNav>
+      <TopNav :top-nav="getTopNavData">
+        <template #default>
+          <slot name="header"></slot>
+        </template>
+      </TopNav>
     </header>
     <div class="main" :style="mainStyle">
       <slot></slot>
