@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Loading from 'vue-loading-overlay';
 import VueMq from 'vue-mq';
+import VueScroll from 'vuescroll';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -18,6 +19,8 @@ Vue.use(VueMq, {
 
 // Init plugin
 Vue.use(Loading);
+
+Vue.use(VueScroll);
 
 Vue.config.productionTip = false;
 

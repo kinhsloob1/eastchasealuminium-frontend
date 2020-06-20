@@ -19,22 +19,6 @@ export default {
     isMobile() {
       return this.$mq === 'mobile';
     }
-  },
-  mounted() {
-    /*
-    const loader = this.$loading.show({
-      loader: 'bars',
-      width: 200,
-      height: 500,
-      opacity: 1
-    });
-
-    setTimeout(() => {
-      loader.hide();
-    }, 3000);
-
-    console.log(this.$data.$isMobileOnly);
-    */
   }
 };
 </script>

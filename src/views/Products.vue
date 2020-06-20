@@ -2,7 +2,9 @@
   <LoggedLayout :top-nav-data="topNavData">
     <template #header>
       <div class="pills">
-        <pillFilter v-for="i in 10" :key="i" :pill-data="{ name: `Pill ${i}` }"></pillFilter>
+        <vue-scroll class="scroller" :ops="pills.scroll">
+          <pillFilter v-for="i in 10" :key="i" class="pill" :pill-data="{ name: `Pill ${i}` }"></pillFilter>
+        </vue-scroll>
       </div>
       <div class="filters">
         <div class="filter">
@@ -41,7 +43,45 @@ export default {
   },
   data() {
     return {
-      isGrid: false
+      isGrid: false,
+      pills: {
+        scroll: {
+          vuescroll: {
+            mode: 'slide',
+            sizeStrategy: 'percent',
+            detectResize: true
+          },
+          scrollPanel: {
+            initialScrollY: false,
+            initialScrollX: false,
+            scrollingX: true,
+            scrollingY: false,
+            speed: 1000,
+            easing: undefined
+          },
+          rail: {
+            background: '#01a99a',
+            opacity: 0,
+            size: '6px',
+            specifyBorderRadius: false,
+            gutterOfEnds: null,
+            gutterOfSide: '2px',
+            keepShow: false
+          },
+          bar: {
+            showDelay: 500,
+            onlyShowBarOnScroll: false,
+            keepShow: false,
+            background: '#c1c1c1',
+            opacity: 0,
+            specifyBorderRadius: false,
+            minSize: 0,
+            size: '6px',
+            disable: false,
+            hoverStyle: false
+          }
+        }
+      }
     };
   },
   computed: {
@@ -61,14 +101,15 @@ export default {
 <style lang="less" scoped>
 .pills {
   display: flex;
-  width: auto;
+  width: 100%;
   overflow: auto;
   flex-wrap: nowrap;
   margin: 15px 10px;
+  white-space: nowrap;
+}
 
-  > * {
-    margin-left: 20px;
-  }
+.pill {
+  margin-left: 20px;
 }
 
 .filters {

@@ -36,7 +36,7 @@ export default {
 <style lang="less" scoped>
 .pill {
   height: auto;
-  display: flex;
+  display: inline-flex;
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;

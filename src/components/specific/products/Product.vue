@@ -8,7 +8,7 @@
       <div class="style">{{ getStyle }}</div>
       <div class="price">
         &#8358;{{ getPrice }}
-        <span class="per">/kg</span>
+        <div class="per">/kg</div>
       </div>
     </div>
   </div>
