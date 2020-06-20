@@ -1,26 +1,24 @@
 <template>
-  <BaseLayout :top-nav-data="topNavData">
+  <LoggedLayout :top-nav-data="topNavData">
     <div class="container">
-      <Login></Login>
+      <SelectCustomer></SelectCustomer>
     </div>
-  </BaseLayout>
+  </LoggedLayout>
 </template>
 
 <script>
-import BaseLayout from '@/components/layouts/BaseLayout.vue';
-import Login from '@/components/specific/Login.vue';
+import LoggedLayout from '@/components/layouts/LoggedLayout.vue';
+import SelectCustomer from '@/components/specific/SelectCustomer.vue';
 
 export default {
   components: {
-    BaseLayout,
-    Login
+    LoggedLayout,
+    SelectCustomer
   },
   computed: {
     topNavData() {
       return {
-        title: 'Login',
-        showBack: true,
-        showSearch: false
+        title: 'Select Customer'
       };
     }
   }

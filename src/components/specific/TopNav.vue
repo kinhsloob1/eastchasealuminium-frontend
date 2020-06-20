@@ -1,10 +1,11 @@
 <template>
   <div class="topNav">
     <div class="controls">
-      <BackSvg v-if="showBack" :view-box="viewBoxString" class="back icon" />
-      <SearchSvg v-if="showSearch" :view-box="viewBoxString" class="search icon" />
+      <BackSvg :view-box="viewBoxString" :class="['back', 'icon', { hidden: !getShowBack }]" />
+      <div class="header-title">{{ getHeaderTitle }}</div>
+      <SearchSvg :view-box="viewBoxString" :class="['search', 'icon', { hidden: !getShowSearch }]" />
     </div>
-    <div class="title">{{ title }}</div>
+    <div v-show="hasTitle" class="title">{{ getTitle }}</div>
     <slot></slot>
   </div>
 </template>
@@ -12,6 +13,7 @@
 <script>
 import BackSvg from '@/assets/svg/009-back-arrow.svg';
 import SearchSvg from '@/assets/svg/010-search.svg';
+import { defaults, isObject } from 'lodash';
 
 export default {
   name: 'TopNav',
@@ -21,13 +23,14 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    topNav: {
+    topNavData: {
       type: Object,
       default() {
         return {
           showBack: true,
           showSearch: false,
-          title: ''
+          title: '',
+          headerTitle: ''
         };
       },
       required: false
@@ -39,17 +42,28 @@ export default {
     };
   },
   computed: {
-    getData() {
-      return this.topNav;
+    getTopNavData() {
+      return defaults(isObject(this.topNavData) ? this.topNavData : {}, {
+        title: '',
+        showSearch: false,
+        showBack: true,
+        headerTitle: ''
+      });
     },
-    title() {
-      return this.getData.title;
+    getTitle() {
+      return this.getTopNavData.title || '';
     },
-    showSearch() {
-      return this.getData.showSearch;
+    getShowSearch() {
+      return this.getTopNavData.showSearch || false;
     },
-    showBack() {
-      return this.getData.showBack;
+    getShowBack() {
+      return this.getTopNavData.showBack || true;
+    },
+    getHeaderTitle() {
+      return this.getTopNavData.headerTitle || '';
+    },
+    hasTitle() {
+      return !!this.getTitle.length;
     }
   }
 };
@@ -78,6 +92,10 @@ export default {
       width: 30px;
       height: 30px;
       padding: 10px;
+
+      &.hidden {
+        visibility: hidden;
+      }
     }
 
     > .back {
@@ -86,6 +104,17 @@ export default {
 
     > .search {
       margin-left: auto;
+    }
+
+    > .header-title {
+      margin-right: auto;
+      margin-left: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 900;
+      font-size: 20px;
+      text-transform: capitalize;
     }
   }
 

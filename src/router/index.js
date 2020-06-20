@@ -8,23 +8,34 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    component: Login
+    redirect: { name: 'login' }
   },
   {
     path: '/login',
     name: 'login',
     component: Login
-  } /* '../views/About.vue')
-  }
-  */
-  /* ,
+  },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */
+    path: '/select-customer',
+    name: 'select-customer',
+    component: () => import(/* webpackChunkName: "select-customer",webpackPrefetch: 1 */ '@/views/SelectCustomer.vue')
+  },
+  {
+    path: '/register-customer',
+    name: 'register-customer',
+    component: () =>
+      import(/* webpackChunkName: "select-customer", webpackPrefetch: 1 */ '@/views/RegisterCustomer.vue')
+  },
+  {
+    path: '/customer-actions',
+    name: 'customer-actions',
+    component: () => import(/* webpackChunkName: "select-customer", webpackPrefetch: 1 */ '@/views/CustomerActions.vue')
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: () => import(/* webpackChunkName: "products", webpackPrefetch: 2 */ '@/views/Products.vue')
+  }
 ];
 
 const router = new VueRouter({

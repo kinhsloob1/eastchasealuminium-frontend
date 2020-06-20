@@ -1,23 +1,23 @@
 <template>
   <div class="container">
     <button class="home">
-      <HomeSvg class="icon" :view-box="viewBoxString" />
+      <HomeSvg class="icon" />
       <span class="text">Home</span>
     </button>
     <button class="store">
-      <StoreSvg class="icon" :view-box="viewBoxString" />
+      <StoreSvg class="icon" />
       <span class="text">Store</span>
     </button>
     <button class="cart">
-      <CartSvg class="icon" :view-box="viewBoxString" />
+      <CartSvg class="icon" />
       <span class="text">Cart</span>
     </button>
     <button class="customers">
-      <CustomerSvg class="icon" :view-box="viewBoxString" />
+      <CustomerSvg class="icon" />
       <span class="text">Customers</span>
     </button>
     <button class="profile">
-      <ProfileSvg class="icon" :view-box="viewBoxString" />
+      <ProfileSvg class="icon" />
       <span class="text">Profile</span>
     </button>
   </div>
@@ -40,9 +40,7 @@ export default {
     ProfileSvg
   },
   data() {
-    return {
-      viewBoxString: '0 0 512 512'
-    };
+    return {};
   }
 };
 </script>

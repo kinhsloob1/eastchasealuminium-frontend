@@ -47,6 +47,7 @@ export default {};
 
     &:focus {
       border: unset;
+      outline: unset;
     }
   }
 
@@ -59,6 +60,7 @@ export default {};
     justify-content: center;
     align-items: center;
     border: unset;
+    outline: unset;
     padding: 15px;
   }
 }

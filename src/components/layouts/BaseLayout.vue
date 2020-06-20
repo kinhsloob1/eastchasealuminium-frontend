@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header ref="header">
-      <TopNav :top-nav="getTopNavData">
+      <TopNav :top-nav-data="getTopNavData">
         <template #default>
           <slot name="header"></slot>
         </template>
@@ -25,15 +25,6 @@ export default {
     TopNav
   },
   inheritAttrs: false,
-  props: {
-    topNavData: {
-      type: Object,
-      required: false,
-      default() {
-        return {};
-      }
-    }
-  },
   data() {
     return {
       heights: {
@@ -44,7 +35,7 @@ export default {
   },
   computed: {
     getTopNavData() {
-      return this.topNavData;
+      return this.$attrs['top-nav-data'];
     },
     mainStyle() {
       return {
