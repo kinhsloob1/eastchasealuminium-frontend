@@ -7,7 +7,7 @@
       <slot></slot>
     </template>
     <template #footer>
-      <div id="bottomNav">
+      <div v-show="getShowBottomNav" id="bottomNav">
         <BottomNav></BottomNav>
       </div>
     </template>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { get, defaults, isObject } from 'lodash';
 import BaseLayout from '@/components/layouts/BaseLayout.vue';
 import BottomNav from '@/components/specific/BottomNav.vue';
 
@@ -28,6 +29,19 @@ export default {
   computed: {
     getTopNavData() {
       return this.$attrs['top-nav-data'];
+    },
+    getBottomNavData() {
+      let bottomNavData = this.$attrs['bottom-nav-data'];
+      if (!isObject(bottomNavData)) {
+        bottomNavData = {};
+      }
+
+      return defaults(bottomNavData, {
+        show: true
+      });
+    },
+    getShowBottomNav() {
+      return Boolean(get(this.getBottomNavData, 'show'));
     }
   }
 };
