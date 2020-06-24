@@ -3,25 +3,32 @@
     <div class="filter origin">
       <div class="title">Origin</div>
       <div class="contents">
-        <prettyRadio
-          v-for="{ name } in origins"
-          :key="name"
-          name="origin"
-          class="inputs p-pulse p-switch"
-          color="danger"
-          off-color="default"
-          toggle
-        >
-          {{ name }} (selected)
-          <template #off-label>
-            <label> {{ name }}</label>
-          </template>
-        </prettyRadio>
+        <div v-for="{ name } in origins" :key="name" class="item">
+          <InputButton :name="name" type="checkbox" :data-name="name" @change.native.stop="updateSelectedOrigins">
+            {{ name }}
+          </InputButton>
+        </div>
       </div>
     </div>
     <div class="filter color">
       <div class="title">Color</div>
-      <div class="contents"></div>
+      <div class="contents">
+        <div v-for="color in colors" :key="color" class="item">
+          <prettyCheckBox
+            class="p-pulse p-default"
+            :name="color"
+            :data-name="color"
+            color="danger-o"
+            off-color="default-o"
+            toggle
+          >
+            {{ color }}
+            <template #off-label>
+              <label>{{ color }}</label>
+            </template>
+          </prettyCheckBox>
+        </div>
+      </div>
     </div>
     <div class="filter style">
       <div class="title">Style</div>
@@ -41,11 +48,14 @@
 
 <script>
 import 'pretty-checkbox/dist/pretty-checkbox.min.css';
-import prettyRadio from 'pretty-checkbox-vue/radio';
+import prettyCheckBox from 'pretty-checkbox-vue/check';
+import InputButton from '@/components/specific/InputButton.vue';
+import { union, pull } from 'lodash';
 
 export default {
   components: {
-    prettyRadio
+    prettyCheckBox,
+    InputButton
   },
   data() {
     return {
@@ -60,8 +70,24 @@ export default {
           name: 'stucco',
           allowColor: false
         }
-      ]
+      ],
+      colors: ['red', 'green', 'blue', 'pink', 'yellow', 'purple', 'dark', 'black'],
+      selected: {
+        origins: [],
+        colors: [],
+        styless: [],
+        guages: []
+      }
     };
+  },
+  methods: {
+    updateSelectedOrigins(e) {
+      const { name } = e.target.dataset;
+      const { origins } = this.$data.selected;
+      const input = e.target;
+
+      this.$set(this.$data.selected, 'origins', input.checked ? union(origins, [name]) : pull(origins, name));
+    }
   }
 };
 </script>
@@ -94,19 +120,20 @@ export default {
       flex-wrap: wrap;
       flex-grow: 1;
       align-items: center;
-      margin-top: 20px;
       width: 100%;
       white-space: pre-wrap;
+      justify-items: flex-start;
+      justify-content: flex-start;
 
-      .inputs {
+      > .item {
+        border: unset;
         display: inline-flex;
-        width: auto;
-        margin: 10px 0 0 15px;
-        font-size: 20px;
+        padding: 0;
+        margin: 20px 15px 0 0px;
       }
     }
 
-    &.filter:nth-child(even) {
+    &.filter:nth-child(odd) {
       background: rgb(255, 255, 255);
       box-shadow: 0px 3px 4px 0px rgb(100, 100, 100);
     }
