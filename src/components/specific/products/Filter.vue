@@ -12,7 +12,7 @@
     </div>
     <div class="filter color">
       <div class="title">Color</div>
-      <div class="contents">
+      <div class="grid">
         <div v-for="color in colors" :key="color" class="item">
           <prettyCheckBox
             class="p-pulse p-default"
@@ -130,6 +130,18 @@ export default {
         display: inline-flex;
         padding: 0;
         margin: 20px 15px 0 0px;
+      }
+    }
+
+    > .grid {
+      display: grid;
+      margin-top: 20px;
+      width: 100%;
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+      grid-gap: 1rem;
+
+      > .item {
+        display: inline-block;
       }
     }
 
