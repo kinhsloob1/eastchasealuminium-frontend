@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { get, isObject, isString, forEach } from 'lodash';
+import { get, isObject, isString, isBoolean } from 'lodash';
 
 export default {
   props: {
@@ -44,8 +44,11 @@ export default {
     getCheckedBackgroundColor() {
       return get(this.$attrs, 'checked-background-color', null);
     },
+    getShowCheckedShadow() {
+      return get(this.$attrs, 'show-checked-shadow', null);
+    },
     getStyle() {
-      let style = get(this.$attrs, 'style', null);
+      let style = get(this.$attrs, 'styles', null);
       style = isObject(style) ? style : {};
       return style;
     },
@@ -70,14 +73,19 @@ export default {
     const { input, button } = this.$refs;
 
     input.addEventListener('change', (e) => {
-      if (e.target.checked && isString(this.getCheckedBackgroundColor)) {
-        button.style.backgroundColor = this.getCheckedBackgroundColor;
-      }
-    });
+      const isChecked = e.target.checked;
+      const showShadow = this.getShowCheckedShadow;
 
-    forEach(this.$attrs, (value, key) => {
-      if (/^data-\S{1,}$/.test(key)) {
-        input.setAttribute(key, value);
+      if (isChecked) {
+        if (isString(this.getCheckedBackgroundColor)) {
+          button.style.backgroundColor = this.getCheckedBackgroundColor;
+        }
+
+        if (isBoolean(showShadow)) {
+          if (!showShadow) {
+            button.style.boxShadow = 'unset';
+          }
+        }
       }
     });
   }
@@ -91,7 +99,6 @@ export default {
   position: relative;
   cursor: pointer;
   user-select: none;
-  overflow: hidden;
 
   > * {
     display: flex;

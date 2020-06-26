@@ -1,13 +1,24 @@
 <template>
   <LoggedLayout :top-nav-data="topNavData">
-    <template #header>
+    <template v-if="showFilter" #header>
+      <div class="filter">
+        <transition name="fade">
+          <filter-element
+            :default-selected="getFilterData"
+            @remove:filter="removeFilter"
+            @update:filter="updateFilter"
+          ></filter-element>
+        </transition>
+      </div>
+    </template>
+    <template v-else #header>
       <div class="pills">
         <vue-scroll class="scroller" :ops="pills.scroll">
           <pillFilter v-for="i in 10" :key="i" class="pill" :pill-data="{ name: `Pill ${i}` }"></pillFilter>
         </vue-scroll>
       </div>
       <div class="filters">
-        <div class="filter">
+        <div class="filter" @click="addFilter">
           <FilterSvg class="icon"></FilterSvg>
           Filters
         </div>
@@ -33,17 +44,29 @@ import PillFilter from '@/components/specific/products/pillFilter.vue';
 import FilterSvg from '@/assets/svg/006-filter.svg';
 import ListSvg from '@/assets/svg/007-view-list-button.svg';
 import GridSvg from '@/assets/svg/008-grid.svg';
+import Filter from '@/components/specific/products/Filter.vue';
 
 export default {
   components: {
     LoggedLayout,
     Product,
     PillFilter,
-    FilterSvg
+    FilterSvg,
+    FilterElement: Filter
   },
   data() {
     return {
       isGrid: false,
+      showFilter: false,
+      filterData: {},
+      productsTopNav: {
+        headerTitle: 'All Products',
+        showSearch: true
+      },
+      filterTopNav: {
+        headerTitle: 'Filter',
+        showSearch: false
+      },
       pills: {
         scroll: {
           vuescroll: {
@@ -85,20 +108,37 @@ export default {
     };
   },
   computed: {
-    topNavData() {
-      return {
-        headerTitle: 'All Products',
-        showSearch: true
-      };
-    },
     gridIcon() {
       return this.isGrid ? ListSvg : GridSvg;
+    },
+    topNavData() {
+      return this.showFilter ? this.filterTopNav : this.productsTopNav;
+    },
+    getFilterData() {
+      return this.filterData;
+    }
+  },
+  methods: {
+    removeFilter() {
+      this.showFilter = false;
+    },
+    updateFilter(filterData) {
+      this.showFilter = false;
+      this.filterData = filterData;
+    },
+    addFilter() {
+      this.showFilter = true;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
+.filter {
+  display: flex;
+  width: 100%;
+}
+
 .pills {
   display: flex;
   width: 100%;
@@ -126,6 +166,7 @@ export default {
     display: flex;
     margin-right: auto;
     align-items: center;
+    cursor: pointer;
 
     > .icon {
       width: 30px;

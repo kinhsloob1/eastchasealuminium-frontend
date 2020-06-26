@@ -35,11 +35,6 @@ const routes = [
     path: '/products',
     name: 'products',
     component: () => import(/* webpackChunkName: "products", webpackPrefetch: 2 */ '@/views/Products.vue')
-  },
-  {
-    path: '/products/filter',
-    name: 'products-filter',
-    component: () => import(/* webpackChunkName: "products", webpackPrefetch: 2 */ '@/views/ProductsFilter.vue')
   }
 ];
 

@@ -72,21 +72,23 @@ export default {
 <style lang="less" scoped>
 .topNav {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-wrap: wrap;
   background-color: rgb(255, 255, 255);
   border-radius: 0 0 20px 20px;
   box-shadow: 2px 2px 7px rgb(150, 150, 150);
   overflow: hidden;
+  position: relative;
+  overflow-y: auto;
+  max-height: 100vh;
   z-index: 9999;
 
   > .controls {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
+    z-index: 1;
 
     > .icon {
       width: 30px;
