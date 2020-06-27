@@ -1,32 +1,33 @@
 <template>
   <LoggedLayout :top-nav-data="topNavData">
-    <template v-if="showFilter" #header>
-      <div class="filter">
-        <transition name="fade">
+    <template #header>
+      <transition name="fade" mode="out-in">
+        <div v-if="showFilter" key="1" class="filter">
           <filter-element
             :default-selected="getFilterData"
             @remove:filter="removeFilter"
             @update:filter="updateFilter"
           ></filter-element>
-        </transition>
-      </div>
-    </template>
-    <template v-else #header>
-      <div class="pills">
-        <vue-scroll class="scroller" :ops="pills.scroll">
-          <pillFilter v-for="i in 10" :key="i" class="pill" :pill-data="{ name: `Pill ${i}` }"></pillFilter>
-        </vue-scroll>
-      </div>
-      <div class="filters">
-        <div class="filter" @click="addFilter">
-          <FilterSvg class="icon"></FilterSvg>
-          Filters
         </div>
-        <button class="grid-switch" @click="isGrid = !isGrid">
-          <component :is="gridIcon" class="icon"></component>
-        </button>
-      </div>
+        <div v-else key="2" class="container">
+          <div class="pills">
+            <vue-scroll class="scroller" :ops="pills.scroll">
+              <pillFilter v-for="i in 10" :key="i" class="pill" :pill-data="{ name: `Pill ${i}` }"></pillFilter>
+            </vue-scroll>
+          </div>
+          <div class="filters">
+            <div class="filter" @click="addFilter">
+              <FilterSvg class="icon"></FilterSvg>
+              Filters
+            </div>
+            <button class="grid-switch" @click="isGrid = !isGrid">
+              <component :is="gridIcon" class="icon"></component>
+            </button>
+          </div>
+        </div>
+      </transition>
     </template>
+
     <div class="products">
       <Product
         v-for="i in 10"
@@ -44,7 +45,6 @@ import PillFilter from '@/components/specific/products/pillFilter.vue';
 import FilterSvg from '@/assets/svg/006-filter.svg';
 import ListSvg from '@/assets/svg/007-view-list-button.svg';
 import GridSvg from '@/assets/svg/008-grid.svg';
-import Filter from '@/components/specific/products/Filter.vue';
 
 export default {
   components: {
@@ -52,7 +52,8 @@ export default {
     Product,
     PillFilter,
     FilterSvg,
-    FilterElement: Filter
+    FilterElement: () =>
+      import(/* webpackChunkName: "product-filter",webpackPrefetch: 3 */ '@/components/specific/products/Filter.vue')
   },
   data() {
     return {
@@ -139,52 +140,57 @@ export default {
   width: 100%;
 }
 
-.pills {
-  display: flex;
-  width: 100%;
-  overflow: auto;
-  flex-wrap: nowrap;
-  margin: 15px 10px;
-  white-space: nowrap;
-}
+.container {
+  &:extend(.filter);
+  flex-wrap: wrap;
 
-.pill {
-  margin-left: 20px;
-}
-
-.filters {
-  display: flex;
-  background-color: rgb(245, 245, 245);
-  margin-top: 20px;
-  flex-wrap: nowrap;
-  align-items: center;
-  width: 100%;
-  margin: 10px 25px;
-  padding: 10px;
-
-  > .filter {
+  > .pills {
     display: flex;
-    margin-right: auto;
-    align-items: center;
-    cursor: pointer;
-
-    > .icon {
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-    }
+    width: 100%;
+    overflow: auto;
+    flex-wrap: nowrap;
+    margin: 15px 10px;
+    white-space: nowrap;
   }
 
-  .grid-switch {
-    &:extend(.filters > .filter);
-    margin-right: unset;
-    margin-left: auto;
-    border: unset;
-    outline: unset;
+  .pill {
+    margin-left: 20px;
+  }
 
-    > .icon {
-      &:extend(.filters > .filter > .icon);
-      margin-right: 5px;
+  > .filters {
+    display: flex;
+    background-color: rgb(245, 245, 245);
+    margin-top: 20px;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    margin: 10px 25px;
+    padding: 10px;
+
+    > .filter {
+      display: flex;
+      margin-right: auto;
+      align-items: center;
+      cursor: pointer;
+
+      > .icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+      }
+    }
+
+    .grid-switch {
+      &:extend(.container > .filters > .filter);
+      margin-right: unset;
+      margin-left: auto;
+      border: unset;
+      outline: unset;
+
+      > .icon {
+        &:extend(.container > .filters > .filter > .icon);
+        margin-right: 5px;
+      }
     }
   }
 }
