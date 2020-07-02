@@ -70,9 +70,23 @@ export default {
   },
   async mounted() {
     await this.$nextTick();
-    const { input, button } = this.$refs;
-
-    input.addEventListener('change', (e) => {
+    this.addListener();
+  },
+  async beforeDestroy() {
+    await this.$nextTick();
+    this.removeListener();
+  },
+  methods: {
+    addListener() {
+      const { input } = this.$refs;
+      input.addEventListener('change', this.changeHandler);
+    },
+    removeListener() {
+      const { input } = this.$refs;
+      input.removeEventListener('change', this.changeHandler);
+    },
+    changeHandler(e) {
+      const { button } = this.$refs;
       const isChecked = e.target.checked;
       const showShadow = this.getShowCheckedShadow;
 
@@ -87,7 +101,7 @@ export default {
           }
         }
       }
-    });
+    }
   }
 };
 </script>

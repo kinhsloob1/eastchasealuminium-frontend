@@ -87,6 +87,11 @@ export default {
         headerTitle: 'Filter',
         showSearch: false
       },
+      addToCartTopNav: {
+        headerTitle: 'Product Detail',
+        title: 'Add To Cart',
+        showSearch: false
+      },
       pills: {
         scroll: {
           vuescroll: {
@@ -132,7 +137,15 @@ export default {
       return this.isGrid ? ListSvg : GridSvg;
     },
     topNavData() {
-      return this.showFilter ? this.filterTopNav : this.productsTopNav;
+      const { showFilter, filterTopNav, showAddToCart, addToCartTopNav, productsTopNav } = this;
+      switch (true) {
+        case showFilter:
+          return filterTopNav;
+        case showAddToCart:
+          return addToCartTopNav;
+        default:
+          return productsTopNav;
+      }
     },
     getFilterData() {
       return this.filterData;
