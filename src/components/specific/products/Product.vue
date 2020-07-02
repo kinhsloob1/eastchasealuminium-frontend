@@ -1,5 +1,5 @@
 <template>
-  <div :class="['product', { grid: getIsGrid }]">
+  <div :class="['product', { grid: getIsGrid }, { inCart: getInCart }]" @click="handleClick">
     <div class="image">
       <img :src="getImageUrl" />
     </div>
@@ -10,12 +10,15 @@
         &#8358;{{ getPrice }}
         <div class="per">/kg</div>
       </div>
+      <div :class="['instruction', { inCart: getInCart }]">
+        {{ getInCart ? 'Already in cart.... click to edit' : 'click to add to cart' }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { isString, get, isNumber, defaults } from 'lodash';
+import { isString, isFinite, get, defaults } from 'lodash';
 
 export default {
   props: {
@@ -23,35 +26,43 @@ export default {
       type: Object,
       required: true,
       validator($data) {
-        const imageUrl = get($data, 'imageUrl', null);
-        const name = get($data, 'name', null);
-        const price = get($data, 'price', null);
-        const style = get($data, 'style', null);
-
-        return isString(imageUrl) && isString(name) && isNumber(price) && isString(style);
+        const { id = null, imageUrl = null, name = null, price = null, style = null } = $data;
+        return isFinite(id) && isString(imageUrl) && isString(name) && isFinite(price) && isString(style);
       }
     }
   },
   computed: {
     getProductData() {
       return defaults(this.productData, {
-        isGrid: false
+        isGrid: false,
+        inCart: false
       });
     },
+    getId() {
+      return get(this.productData, 'id');
+    },
     getImageUrl() {
-      return this.productData.imageUrl;
+      return get(this.getProductData, 'imageUrl');
     },
     getName() {
-      return this.productData.name;
+      return get(this.getProductData, 'name');
     },
     getPrice() {
-      return this.productData.price;
+      return get(this.getProductData, 'price', 0);
     },
     getStyle() {
-      return this.productData.style;
+      return get(this.getProductData, 'style');
     },
     getIsGrid() {
-      return this.productData.isGrid;
+      return get(this.getProductData, 'isGrid');
+    },
+    getInCart() {
+      return get(this.getProductData, 'inCart');
+    }
+  },
+  methods: {
+    handleClick() {
+      return this.$emit('click', this.getProductData);
     }
   }
 };
@@ -64,13 +75,21 @@ export default {
   display: flex;
   flex-wrap: nowrap;
   border-radius: 15px;
+  cursor: pointer;
   overflow: hidden;
+  align-items: flex-start;
+
+  &:hover,
+  &.inCart {
+    box-shadow: 3px 3px 3px 0 rgb(100, 100, 100);
+  }
 
   > .image {
     position: relative;
     display: flex;
     width: 150px;
     height: 100%;
+    flex-shrink: 0;
     background-color: rgb(100, 100, 100);
 
     > img {
@@ -86,6 +105,7 @@ export default {
 
   > .contents {
     flex-grow: 1;
+    flex-shrink: 1;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
@@ -120,6 +140,22 @@ export default {
         margin-left: 10px;
         font-weight: 300;
         font-size: 11px;
+      }
+    }
+
+    > .instruction {
+      font-size: 15px;
+      text-transform: capitalize;
+      color: rgb(51, 51, 51);
+      justify-content: flex-start;
+      align-items: center;
+      white-space: pre-wrap;
+      margin-top: 5px;
+      word-wrap: break-word;
+      transition: all 0.3s ease-in;
+
+      &.inCart {
+        color: rgb(255, 36, 36);
       }
     }
   }

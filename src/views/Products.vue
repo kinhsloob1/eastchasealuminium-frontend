@@ -2,14 +2,21 @@
   <LoggedLayout :top-nav-data="topNavData">
     <template #header>
       <transition name="fade" mode="out-in">
-        <div v-if="showFilter" key="1" class="filter">
+        <div v-if="showFilter" key="1" class="filter-product">
           <filter-element
             :default-selected="getFilterData"
             @remove:filter="removeFilter"
             @update:filter="updateFilter"
           ></filter-element>
         </div>
-        <div v-else key="2" class="container">
+        <div v-else-if="showAddToCart" key="2" class="cart">
+          <add-to-cart
+            :product="getProductCartData"
+            @remove:cart="removeCart"
+            @update:cart="saveCartData"
+          ></add-to-cart>
+        </div>
+        <div v-else key="3" class="container">
           <div class="pills">
             <vue-scroll class="scroller" :ops="pills.scroll">
               <pillFilter v-for="i in 10" :key="i" class="pill" :pill-data="{ name: `Pill ${i}` }"></pillFilter>
@@ -32,7 +39,15 @@
       <Product
         v-for="i in 10"
         :key="i"
-        :product-data="{ imageUrl: '', name: `Product ${i}`, style: 'Total embrossed', price: 4000, isGrid }"
+        :product-data="{
+          id: i,
+          imageUrl: 'http://image.com',
+          name: `Product ${i}`,
+          style: 'Total embrossed',
+          price: 4000,
+          isGrid
+        }"
+        @click="addCart"
       ></Product>
     </div>
   </LoggedLayout>
@@ -53,12 +68,16 @@ export default {
     PillFilter,
     FilterSvg,
     FilterElement: () =>
-      import(/* webpackChunkName: "product-filter",webpackPrefetch: 3 */ '@/components/specific/products/Filter.vue')
+      import(/* webpackChunkName: "product-filter",webpackPrefetch: 3 */ '@/components/specific/products/Filter.vue'),
+    addToCart: () =>
+      import(/* webpackChunkName: "test", webpackPrefetch: 2 */ '@/components/specific/products/addToCart.vue')
   },
   data() {
     return {
       isGrid: false,
       showFilter: false,
+      showAddToCart: false,
+      productCartData: {},
       filterData: {},
       productsTopNav: {
         headerTitle: 'All Products',
@@ -117,6 +136,9 @@ export default {
     },
     getFilterData() {
       return this.filterData;
+    },
+    getProductCartData() {
+      return this.productCartData;
     }
   },
   methods: {
@@ -129,15 +151,29 @@ export default {
     },
     addFilter() {
       this.showFilter = true;
+    },
+    removeCart() {
+      this.showAddToCart = false;
+      this.productCartData = {};
+    },
+    saveCartData() {},
+    addCart(productData) {
+      this.productCartData = productData;
+      this.showAddToCart = true;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.filter {
+.filter-product {
   display: flex;
   width: 100%;
+  min-height: 100vh;
+}
+
+.cart {
+  &:extend(.filter-product);
 }
 
 .container {
