@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const { create, CancelToken: cancelToken } = axios;
+const baseURL = 'http://localhost:8000/api/v1';
 const instance = create({
-  baseURL: '/api',
+  baseURL,
   withCredentials: true,
   responseType: 'json',
   timeout: 1000,
@@ -27,10 +28,12 @@ instance.interceptors.request.use(
 const getCsrfToken = async (csrfRequestObject) => {
   try {
     const {
-      data: { data: token }
-    } = axios(csrfRequestObject);
+      data: {
+        data: { token }
+      }
+    } = await axios(csrfRequestObject);
     return token;
-  } catch {
+  } catch (e) {
     return null;
   }
 };
@@ -54,7 +57,11 @@ instance.interceptors.response.use(
 
       while (!token && tries < 5) {
         // eslint-disable-next-line no-await-in-loop
-        token = await getCsrfToken(config);
+        token = await getCsrfToken({
+          method: 'get',
+          url: `${baseURL}/csrf/token`,
+          withCredentials: true
+        });
         tries += 1;
       }
 

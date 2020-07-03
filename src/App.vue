@@ -24,13 +24,21 @@ export default {
   async mounted() {
     try {
       const { data } = await axios.request({
-        method: 'get',
-        url: 'school'
+        method: 'post',
+        url: 'login',
+        headers: {
+          'content-type': 'application/json'
+        },
+        data: {
+          email: 'kingsloob1@gmail.com',
+          password: 'password'
+        }
       });
 
       console.log('data', data);
     } catch (e) {
-      console.log('catch handler', e);
+      console.log('catch handler');
+      console.log(e);
     }
   }
 };
