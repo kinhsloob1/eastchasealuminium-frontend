@@ -72,8 +72,7 @@ export default {
     await this.$nextTick();
     this.addListener();
   },
-  async beforeDestroy() {
-    await this.$nextTick();
+  beforeDestroy() {
     this.removeListener();
   },
   methods: {

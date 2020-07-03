@@ -9,6 +9,7 @@
 <script>
 import PageLoading from '@/components/specific/loaders/Page.vue';
 import ComingSoon from '@/components/specific/ComingSoon.vue';
+import axios from '@/utils/axios';
 
 export default {
   components: {
@@ -18,6 +19,18 @@ export default {
   computed: {
     isMobile() {
       return this.$mq === 'mobile';
+    }
+  },
+  async mounted() {
+    try {
+      const { data } = await axios.request({
+        method: 'get',
+        url: 'school'
+      });
+
+      console.log('data', data);
+    } catch (e) {
+      console.log('catch handler', e);
     }
   }
 };

@@ -10,5 +10,10 @@ module.exports = {
       .end()
       .use('vue-svg-loader')
       .loader('vue-svg-loader');
+  },
+  pluginOptions: {
+    webpackBundleAnalyzer: {
+      openAnalyzer: true
+    }
   }
 };
